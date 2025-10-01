@@ -32,15 +32,20 @@ See the [Roadmap](#roadmap) for planned enhancements.
 
 ## Quick Start
 
+On Ubuntu / Linux platforms
 ```bash
 # 1  Install (editable mode recommended during development)
-$ git clone https://github.com/<you>/seo-audit-machine.git
-$ cd seo-audit-machine
-$ python -m venv .venv && source .venv/bin/activate
-$ pip install -e .[dev]
+$ git clone https://github.com/FredTyre/SEO-Audit-Machine.git
+$ cd SEO-Audit-Machine
+# Make the setup script executable (only needed once)
+$ chmod +x setup_env.sh
+# Run the script to create venv + install requirements
+$ ./setup_env.sh
+# Later use the following to activate the virtual environment
+$ source .seoaudmach/bin/activate
 
 # 2  Set Google credentials (see below)
-$ export GOOGLE_APPLICATION_CREDENTIALS="/path/to/credentials.json"
+$ export GOOGLE_APPLICATION_CREDENTIALS=".secrets/client_secret.json"
 
 # 3  Initialise the database
 $ seo-audit-machine init-db
@@ -50,6 +55,28 @@ $ seo-audit-machine add-site https://example.com --name "Marketing Site"
 
 # 5  Run your first audit (deep = crawl + index checks)
 $ seo-audit-machine full-audit --site-id 1 --deep
+```
+
+```bat
+# 1  Install (editable mode recommended during development)
+> git clone https://github.com/FredTyre/SEO-Audit-Machine.git
+> cd SEO-Audit-Machine
+# Run the script to create venv + install requirements
+> ./setup_env.bat
+# Later use the following to activate the virtual environment
+> call .seoaudmach\Scripts\activate
+
+# 2  Set Google credentials (see below)
+> export GOOGLE_APPLICATION_CREDENTIALS=".secrets/client_secret.json"
+
+# 3  Initialise the database
+> seo-audit-machine init-db
+
+# 4  Add a site to track
+> seo-audit-machine add-site https://example.com --name "Marketing Site"
+
+# 5  Run your first audit (deep = crawl + index checks)
+> seo-audit-machine full-audit --site-id 1 --deep
 ```
 
 ### Obtaining Google Search Console API access

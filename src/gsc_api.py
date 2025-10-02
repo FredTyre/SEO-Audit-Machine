@@ -1,5 +1,7 @@
 from __future__ import annotations
 import pathlib
+
+from datetime import date
 from typing import Any, List, Dict, Optional, cast
 
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -57,6 +59,36 @@ def get_sitemap(site_url: str, feedpath: str) -> Dict[str, Any]:
     """Gets a specific sitemap’s metadata (e.g., lastSubmitted, is pending, etc.)."""
     svc = build_service("searchconsole", "v1")
     return svc.sitemaps().get(siteUrl=site_url, feedpath=feedpath).execute()
+
+def search_analytics_pages(
+    site_url: str,
+    *,
+    start_date: str,
+    end_date: str,
+    row_limit: int = 25000,
+    start_row: int = 0,
+    dimensions: Optional[list] = None,
+    filter_pages_prefix: Optional[str] = None,
+) -> List[Dict]:
+    """
+    Call Search Analytics query for `dimensions=['page']` and return raw rows.
+    NOTE: This returns a sample, NOT a full list of indexed URLs.
+    """
+    dims = dimensions or ["page"]
+    svc = build_service("searchconsole", "v1")  # reuse your existing builder
+    body = {
+        "startDate": start_date,
+        "endDate": end_date,
+        "dimensions": dims,
+        "rowLimit": row_limit,
+        "startRow": start_row,
+        # Optional filters: e.g., restrict to a prefix
+        # "dimensionFilterGroups": [{
+        #   "filters": [{"dimension": "page", "operator": "contains", "expression": "/blog/"}]
+        # }]
+    }
+    res = svc.searchanalytics().query(siteUrl=site_url, body=body).execute()
+    return res.get("rows", [])
 
 def url_inspect(site_url: str, url: str) -> Dict[str, Any]:
     """
